@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 RELEASES=(
-CMSSW_12_4_X \
+CMSSW_12_4_15 \
 )
 ARCHS=(
 slc7_amd64_gcc10 \

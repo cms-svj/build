@@ -8,22 +8,21 @@ if [ ! -d $REPODIR ]; then
 fi
 
 WHICH_CMSSW="$1"
+CMSSW_BRANCH=$(echo $WHICH_CMSSW | cut -d'_' -f1-3)"_X"
 SCRAM_ARCH="$2"
-TMPDIR=$(mktemp -u tmp_XXXXXXXXXX)
-BUILDDIR=${PWD}/${TMPDIR}/${SCRAM_ARCH}
 RELDIR=${REPODIR}/${WHICH_CMSSW}/${SCRAM_ARCH}
-LIBDIR=lib
-TOOLDIR=tools
+TMPDIR=${RELDIR}/tmp
+TOOLSDIR=${RELDIR}/tools
 
 echo "cms-svj/build: building for $WHICH_CMSSW ($SCRAM_ARCH) in $TMPDIR"
 
-for DIR in ${RELDIR} ${RELDIR}/${LIBDIR} ${RELDIR}/${TOOLDIR}; do
+for DIR in ${RELDIR} ${TMPDIR} ${TOOLSDIR}; do
 	mkdir -p ${DIR}
 done
 
-eval $(curl -s -k https://raw.githubusercontent.com/cms-sw/cms-bot/master/config.map | grep "SCRAM_ARCH=$SCRAM_ARCH" | grep "RELEASE_BRANCH=$WHICH_CMSSW")
+eval $(curl -s -k https://raw.githubusercontent.com/cms-sw/cms-bot/master/config.map | grep "SCRAM_ARCH=$SCRAM_ARCH" | grep "RELEASE_BRANCH=$CMSSW_BRANCH")
 (cd pkgtools && git checkout $PKGTOOLS_TAG)
-(cd cmsdist && git checkout IB/${WHICH_CMSSW}/master)
+(cd cmsdist && git checkout IB/${CMSSW_BRANCH}/master)
 
 TOOLS=(
 pythia8 \
@@ -39,8 +38,25 @@ echo "cms-svj/build: building ${TOOLS[@]}"
 
 pkgtools/cmsBuild -i $TMPDIR -a $SCRAM_ARCH -j 4 build $TOOLFILE_LIST
 
+ABSDIR=${PWD}
+BUILDDIR=${ABSDIR}/${TMPDIR}/${SCRAM_ARCH}
+TOOLSDIR=${ABSDIR}/${TOOLSDIR}
+# this part requires dir changes, so run in a subshell
+getArtifacts() {
+WHICH_CMSSW_BASE=$(scram list -c $WHICH_CMSSW | tr -s ' ' | cut -d' ' -f3)
+cd ${BUILDDIR}/external
 for TOOL in ${TOOLS[@]}; do
-	cp -r ${BUILDDIR}/external/${TOOL} ${RELDIR}/${LIBDIR}/
-	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml ${RELDIR}/${TOOLDIR}/
-	sed -i 's~'$BUILDDIR'~$CMSSW_BASE/'${RELDIR}/${LIBDIR}'~' ${RELDIR}/${TOOLDIR}/${TOOL}.xml
+	LATESTDIR=$(ls -drt ${TOOL}/* | tail -1)
+	ORIGDIR=$(dirname $(cd $WHICH_CMSSW_BASE && scram tool tag $TOOL LIBDIR))
+	# list of changed files
+	DIFFFILES=$(diff -qr $LATESTDIR $ORIGDIR | grep '^Files' | cut -d' ' -f2)
+	for DF in ${DIFFFILES[@]}; do
+		# preserve path
+		cp --parents $DF ${TOOLSDIR}/
+	done
+	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml ${TOOLSDIR}/
+	sed -i 's~'$BUILDDIR'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOLSDIR}/${TOOL}.xml
 done
+}
+
+(getArtifacts)
