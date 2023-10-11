@@ -1,7 +1,7 @@
-<tool name="pythia8" version="306-3535c0959cf5f0d91ee1acb501d730ff">
+<tool name="pythia8" version="306-2a52225c5b09dea44fcd9f82e1688682">
   <lib name="pythia8"/>
   <client>
-    <environment name="PYTHIA8_BASE" default="$CMSSW_BASE/build/CMSSW_12_4_15/el8_amd64_gcc10/tools/pythia8/306-3535c0959cf5f0d91ee1acb501d730ff"/>
+    <environment name="PYTHIA8_BASE" default="$CMSSW_BASE/build/CMSSW_12_4_15/el8_amd64_gcc10/tools/pythia8/306-2a52225c5b09dea44fcd9f82e1688682"/>
     <environment name="LIBDIR" default="$PYTHIA8_BASE/lib"/>
     <environment name="INCLUDE" default="$PYTHIA8_BASE/include"/>
   </client>

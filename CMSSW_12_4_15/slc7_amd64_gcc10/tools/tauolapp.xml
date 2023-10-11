@@ -1,11 +1,11 @@
-<tool name="tauolapp" version="1.1.8-c2dff32d490b71605acef6b3c7cb0a36">
+<tool name="tauolapp" version="1.1.8-5c4faaa3d5ddc2d72dd03a1f4952c54d">
   <lib name="TauolaCxxInterface"/>
   <lib name="TauolaFortran"/>
   <lib name="TauolaTauSpinner"/>
   <lib name="TauolaHepMC"/>
   <lib name="TauolaHEPEVT"/>
   <client>
-    <environment name="TAUOLAPP_BASE" default="$CMSSW_BASE/build/CMSSW_12_4_15/slc7_amd64_gcc10/tools/tauolapp/1.1.8-c2dff32d490b71605acef6b3c7cb0a36"/>
+    <environment name="TAUOLAPP_BASE" default="$CMSSW_BASE/build/CMSSW_12_4_15/slc7_amd64_gcc10/tools/tauolapp/1.1.8-5c4faaa3d5ddc2d72dd03a1f4952c54d"/>
     <environment name="LIBDIR" default="$TAUOLAPP_BASE/lib"/>
     <environment name="INCLUDE" default="$TAUOLAPP_BASE/include"/>
   </client>
