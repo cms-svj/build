@@ -40,7 +40,7 @@ pkgtools/cmsBuild -i $TMPDIR -a $SCRAM_ARCH -j 4 build $TOOLFILE_LIST
 
 ABSDIR=${PWD}
 BUILDDIR=${ABSDIR}/${TMPDIR}/${SCRAM_ARCH}
-TOOLSDIR=${ABSDIR}/${TOOLSDIR}
+ABSTOOLSDIR=${ABSDIR}/${TOOLSDIR}
 # this part requires dir changes, so run in a subshell
 getArtifacts() {
 WHICH_CMSSW_BASE=$(scram list -c $WHICH_CMSSW | tr -s ' ' | cut -d' ' -f3)
@@ -52,10 +52,10 @@ for TOOL in ${TOOLS[@]}; do
 	DIFFFILES=$(diff -qr $LATESTDIR $ORIGDIR | grep '^Files' | cut -d' ' -f2)
 	for DF in ${DIFFFILES[@]}; do
 		# preserve path
-		cp --parents $DF ${TOOLSDIR}/
+		cp --parents $DF ${ABSTOOLSDIR}/
 	done
-	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml ${TOOLSDIR}/
-	sed -i 's~'$BUILDDIR'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOLSDIR}/${TOOL}.xml
+	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml ${ABSTOOLSDIR}/
+	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${ABSTOOLSDIR}/${TOOL}.xml
 done
 }
 
