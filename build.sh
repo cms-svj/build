@@ -44,8 +44,12 @@ ABSTOOLSDIR=${ABSDIR}/${TOOLSDIR}
 # this part requires dir changes, so run in a subshell
 getArtifacts() {
 WHICH_CMSSW_BASE=$(scram list -c $WHICH_CMSSW | tr -s ' ' | cut -d' ' -f3)
-cd ${BUILDDIR}/external
 for TOOL in ${TOOLS[@]}; do
+	# remove old version(s)
+	cd ${ABSTOOLSDIR}
+	git rm -r $(ls -drt ${TOOL}/*)
+	# get new version
+	cd ${BUILDDIR}/external
 	LATESTDIR=$(ls -drt ${TOOL}/* | tail -1)
 	ORIGDIR=$(dirname $(cd $WHICH_CMSSW_BASE && scram tool tag $TOOL LIBDIR))
 	# list of changed files
@@ -54,8 +58,11 @@ for TOOL in ${TOOLS[@]}; do
 		# preserve path
 		cp --parents $DF ${ABSTOOLSDIR}/
 	done
-	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml ${ABSTOOLSDIR}/
-	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${ABSTOOLSDIR}/${TOOL}.xml
+	cd ${ABSTOOLSDIR}
+	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml .
+	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOL}.xml
+	# add new version
+	git add $(ls -drt ${TOOL}/* | tail -1)
 done
 }
 
