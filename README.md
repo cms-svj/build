@@ -17,3 +17,5 @@ chmod +x setup.sh
 `setup.sh` clones this repository and supporting repositories.
 
 `buildAll.sh` runs `build.sh` for all known release/OS combinations.
+
+After running, use `git commit` to save the new or updated artifacts.
