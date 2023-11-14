@@ -1,0 +1,14 @@
+<tool name="evtgen" version="2.0.0-55fbd35f3034b8518f27ef588686f9a3">
+  <lib name="EvtGen"/>
+  <lib name="EvtGenExternal"/>
+  <client>
+    <environment name="EVTGEN_BASE" default="$CMSSW_BASE/build/CMSSW_12_4_X/el8_amd64_gcc10/tools/evtgen/2.0.0-55fbd35f3034b8518f27ef588686f9a3"/>
+    <environment name="LIBDIR" default="$EVTGEN_BASE/lib"/>
+    <environment name="INCLUDE" default="$EVTGEN_BASE/include"/>
+  </client>
+  <runtime name="EVTGENDATA" value="$EVTGEN_BASE/share/EvtGen"/>
+  <use name="hepmc"/>
+  <use name="pythia8"/>
+  <use name="tauolapp"/>
+  <use name="photospp"/>
+</tool>
