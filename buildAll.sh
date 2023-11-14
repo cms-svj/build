@@ -11,6 +11,7 @@ ENVS=(
 "cmssw-el7" \
 "cmssw-el8" \
 )
+export APPTAINER_BIND="$(readlink -f $PWD):/work"
 for RELEASE in ${RELEASES[@]}; do
 	for ((i=0; i < ${#ARCHS[@]}; i++)); do
 		ARCH=${ARCHS[$i]}

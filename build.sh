@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+cd /work
+
 REPODIR=build
 # must run from outside build/
 if [ ! -d $REPODIR ]; then
@@ -47,7 +49,9 @@ WHICH_CMSSW_BASE=$(scram list -c $WHICH_CMSSW | tr -s ' ' | cut -d' ' -f3)
 for TOOL in ${TOOLS[@]}; do
 	# remove old version(s)
 	cd ${ABSTOOLSDIR}
-	git rm -r $(ls -drt ${TOOL}/*)
+	if [ -d ${TOOL} ]; then
+		git rm -r $(ls -drt ${TOOL}/*)
+	fi
 	# get new version
 	cd ${BUILDDIR}/external
 	LATESTDIR=$(ls -drt ${TOOL}/* | tail -1)
