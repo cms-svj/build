@@ -1,11 +1,11 @@
 #!/bin/bash -e
 
 RELEASES=(
-CMSSW_12_4_17 \
+CMSSW_13_0_13 \
 )
 ARCHS=(
-slc7_amd64_gcc10 \
-el8_amd64_gcc10 \
+slc7_amd64_gcc11 \
+el8_amd64_gcc11 \
 )
 ENVS=(
 "cmssw-el7" \

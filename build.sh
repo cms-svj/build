@@ -27,9 +27,9 @@ eval $(curl -s -k https://raw.githubusercontent.com/cms-sw/cms-bot/master/config
 (cd cmsdist && git checkout IB/${CMSSW_BRANCH}/master)
 
 TOOLS=(
-pythia8 \
-evtgen \
-tauolapp \
+hls \
+hls4mlEmulatorExtras \
+CICADA \
 )
 TOOLFILE_LIST=""
 for TOOL in ${TOOLS[@]}; do
@@ -56,12 +56,14 @@ for TOOL in ${TOOLS[@]}; do
 	cd ${BUILDDIR}/external
 	LATESTDIR=$(ls -drt ${TOOL}/* | tail -1)
 	ORIGDIR=$(dirname $(cd $WHICH_CMSSW_BASE && scram tool tag $TOOL LIBDIR))
-	# list of changed files
-	DIFFFILES=$(diff -qr $LATESTDIR $ORIGDIR | grep '^Files' | cut -d' ' -f2)
-	for DF in ${DIFFFILES[@]}; do
-		# preserve path
-		cp --parents $DF ${ABSTOOLSDIR}/
-	done
+	if [ -n "$ORIGDIR" ]; then
+		# list of changed files
+		DIFFFILES=$(diff -qr $LATESTDIR $ORIGDIR | grep '^Files' | cut -d' ' -f2)
+		for DF in ${DIFFFILES[@]}; do
+			# preserve path
+			cp --parents $DF ${ABSTOOLSDIR}/
+		done
+	fi
 	cd ${ABSTOOLSDIR}
 	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml .
 	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOL}.xml
