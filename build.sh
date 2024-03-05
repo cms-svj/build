@@ -27,7 +27,6 @@ eval $(curl -s -k https://raw.githubusercontent.com/cms-sw/cms-bot/master/config
 (cd cmsdist && git checkout IB/${CMSSW_BRANCH}/master)
 
 TOOLS=(
-hls \
 hls4mlEmulatorExtras \
 CICADA \
 )
