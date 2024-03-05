@@ -45,6 +45,7 @@ BUILDDIR=${ABSDIR}/${TMPDIR}/${SCRAM_ARCH}
 ABSTOOLSDIR=${ABSDIR}/${TOOLSDIR}
 # this part requires dir changes, so run in a subshell
 getArtifacts() {
+source /cvmfs/cms.cern.ch/cmsset_default.sh
 WHICH_CMSSW_BASE=$(scram list -c $WHICH_CMSSW | tr -s ' ' | cut -d' ' -f3)
 for TOOL in ${TOOLS[@]}; do
 	# remove old version(s)
@@ -55,7 +56,7 @@ for TOOL in ${TOOLS[@]}; do
 	# get new version
 	cd ${BUILDDIR}/external
 	LATESTDIR=$(ls -drt ${TOOL}/* | tail -1)
-	ORIGDIR=$(dirname $(cd $WHICH_CMSSW_BASE && scram tool tag $TOOL LIBDIR))
+	ORIGDIR=$(dirname $(cd $WHICH_CMSSW_BASE && scram tool tag $TOOL LIBDIR) || echo "")
 	if [ -n "$ORIGDIR" ]; then
 		# list of changed files
 		DIFFFILES=$(diff -qr $LATESTDIR $ORIGDIR | grep '^Files' | cut -d' ' -f2)
@@ -63,12 +64,16 @@ for TOOL in ${TOOLS[@]}; do
 			# preserve path
 			cp --parents $DF ${ABSTOOLSDIR}/
 		done
+	else
+		cp -r --parents ${LATESTDIR} ${ABSTOOLSDIR}/
 	fi
 	cd ${ABSTOOLSDIR}
-	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml .
-	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOL}.xml
+	# all toolfile names are lowercase
+	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL,,}.xml .
+	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOL,,}.xml
 	# add new version
 	git add $(ls -drt ${TOOL}/* | tail -1)
+	git add ${TOOL,,}.xml
 done
 }
 
