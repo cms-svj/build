@@ -48,6 +48,7 @@ BUILDDIR=${ABSDIR}/${TMPDIR}/${SCRAM_ARCH}
 ABSTOOLSDIR=${ABSDIR}/${TOOLSDIR}
 # this part requires dir changes, so run in a subshell
 getArtifacts() {
+source /cvmfs/cms.cern.ch/cmsset_default.sh
 WHICH_CMSSW_BASE=$(scram list -c $WHICH_CMSSW | tr -s ' ' | cut -d' ' -f3)
 for TOOL in ${TOOLS[@]}; do
 	# remove old version(s)
