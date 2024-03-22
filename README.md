@@ -8,7 +8,7 @@ Starting from a clean shell (no `cmsenv` etc.):
 ```bash
 mkdir tmp
 cd tmp
-wget https://raw.githubusercontent.com/cms-svj/build/main/setup.sh
+wget https://raw.githubusercontent.com/cms-svj/build/slha/setup.sh
 chmod +x setup.sh
 ./setup.sh
 ./build/buildAll.sh
