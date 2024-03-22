@@ -1,0 +1,12 @@
+<tool name="dire" version="2.003-383f7844890c5756be7fc57982774af8">
+  <lib name="dire"/>
+  <client>
+    <environment name="DIRE_BASE" default="$CMSSW_BASE/build/CMSSW_10_6_X/slc7_amd64_gcc700/tools/dire/2.003-383f7844890c5756be7fc57982774af8"/>
+    <environment name="LIBDIR" default="$DIRE_BASE/lib"/>
+    <environment name="INCLUDE" default="$DIRE_BASE/include"/>
+    <environment name="BINDIR" default="$DIRE_BASE/bin"/>
+  </client>
+  <runtime name="PATH" default="$BINDIR" type="path"/>
+  <use name="root_cxxdefaults"/>
+  <use name="pythia8"/>
+</tool>

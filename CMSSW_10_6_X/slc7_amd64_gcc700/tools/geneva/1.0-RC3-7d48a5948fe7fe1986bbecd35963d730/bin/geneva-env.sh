@@ -1,0 +1,1 @@
+export PYTHONPATH="/work/build/CMSSW_10_6_X/slc7_amd64_gcc700/tmp/tmp/BUILDROOT/7d48a5948fe7fe1986bbecd35963d730/opt/cmssw/slc7_amd64_gcc700/external/geneva/1.0-RC3-7d48a5948fe7fe1986bbecd35963d730/lib/python2.7/site-packages:$PYTHONPATH"
