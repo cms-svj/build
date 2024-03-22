@@ -19,3 +19,12 @@ chmod +x setup.sh
 `buildAll.sh` runs `build.sh` for all known release/OS combinations.
 
 After running, use `git commit` to save the new or updated artifacts.
+
+# Usage
+
+To set up a CMSSW release with the precompiled binaries in this repository:
+```bash
+wget https://raw.githubusercontent.com/cms-svj/build/slha/install.sh
+chmod +x install.sh
+./install.sh
+```
