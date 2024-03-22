@@ -24,12 +24,15 @@ done
 
 eval $(curl -s -k https://raw.githubusercontent.com/cms-sw/cms-bot/master/config.map | grep "SCRAM_ARCH=$SCRAM_ARCH" | grep "RELEASE_BRANCH=$CMSSW_BRANCH")
 (cd pkgtools && git checkout $PKGTOOLS_TAG)
-(cd cmsdist && git checkout IB/${CMSSW_BRANCH}/master)
+(cd cmsdist && git checkout IB/${CMSSW_BRANCH}/$(echo $SCRAM_ARCH | cut -d'_' -f3))
 
 TOOLS=(
 pythia8 \
+dire \
 evtgen \
+geneva \
 tauolapp \
+vincia \
 )
 TOOLFILE_LIST=""
 for TOOL in ${TOOLS[@]}; do
@@ -63,7 +66,7 @@ for TOOL in ${TOOLS[@]}; do
 		cp --parents $DF ${ABSTOOLSDIR}/
 	done
 	cd ${ABSTOOLSDIR}
-	cp ${BUILDDIR}/cms/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml .
+	cp ${BUILDDIR}/external/${TOOL}-toolfile/*/etc/scram.d/${TOOL}.xml .
 	sed -i 's~'$BUILDDIR/external'~$CMSSW_BASE/'${TOOLSDIR}'~' ${TOOL}.xml
 	# add new version
 	git add $(ls -drt ${TOOL}/* | tail -1)
